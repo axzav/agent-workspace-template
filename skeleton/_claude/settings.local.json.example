@@ -1,0 +1,9 @@
+{
+  "autoMemoryDirectory": "/ABSOLUTE/PATH/TO/{{PROJECT}}/workspace/memory",
+  "permissions": { "allow": [] },
+  "hooks": {
+    "PreToolUse": [
+      { "matcher": "Bash", "hooks": [ { "type": "command", "command": "$CLAUDE_PROJECT_DIR/local/hooks/guard-stack.sh" } ] }
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+name: bookly
+lang: ru
+task_prefix: BOOK                     # = очередь трекера: id задачи = ключ BOOK-412
+local_prefix: BKL                     # задачи без тикета: BKL-0001
+
+tracker:
+  mode: remote
+  remote_transport: mcp:tracker        # публикация описания (trk.sh publish --json) через MCP-сервер tracker
+
+repos:
+  - path: backend
+    role: REST API, домен, воркеры очередей
+    stack: Symfony 7.1, PHP 8.3, PostgreSQL 16, Redis, RabbitMQ
+    base_branch: main
+    commit_scope: "feat(BOOK-NNN)"
+    status: active
+  - path: frontend
+    role: веб-приложение гостя и хоста
+    stack: React 19, Vite, TypeScript, Tailwind
+    base_branch: main
+    commit_scope: "feat(BOOK-NNN)"
+    status: active
+  - path: realtime
+    role: WebSocket-уведомления
+    stack: Node 22, ws, Redis pub/sub
+    base_branch: main
+    commit_scope: "feat(BOOK-NNN)"
+    status: wip
+  - path: infra
+    role: локальный стек и деплой
+    stack: docker compose, make, nginx
+    base_branch: main
+    status: active
+
+run:
+  team: "cd infra && make up"
+  healthcheck: "cd infra && make smoke"
+
+ports:
+  app: 8080
+  api: 8080
+  postgres: 5432
+  rabbitmq_ui: 15672
+
+toolkit:
+  sources: []

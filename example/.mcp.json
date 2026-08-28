@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "tracker": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://tracker.example.com/mcp/sse", "--header", "Authorization:Bearer ${BOOKLY_TRACKER_TOKEN}"]
+    }
+  }
+}

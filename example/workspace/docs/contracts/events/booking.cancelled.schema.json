@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "booking.cancelled",
+  "type": "object",
+  "required": ["event", "booking_id", "cancelled_by", "refund", "occurred_at"],
+  "properties": {
+    "event": { "const": "booking.cancelled" },
+    "booking_id": { "type": "string", "format": "uuid" },
+    "cancelled_by": { "enum": ["guest", "host", "support"] },
+    "refund": { "type": "object", "required": ["amount", "currency"], "properties": { "amount": { "type": "integer", "minimum": 0 }, "currency": { "type": "string" } } },
+    "occurred_at": { "type": "string", "format": "date-time" }
+  }
+}

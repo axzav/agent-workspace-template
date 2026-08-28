@@ -1,0 +1,5 @@
+# Возвращает папки сервисов в поиск агента (Grep/Glob уважают .gitignore; .ignore сильнее для поиска, git его не читает).
+!/backend/
+!/frontend/
+!/realtime/
+!/infra/

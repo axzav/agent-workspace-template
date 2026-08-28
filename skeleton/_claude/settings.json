@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Read", "Grep", "Glob",
+      "Bash(git status *)", "Bash(git diff *)", "Bash(git log *)", "Bash(git show *)", "Bash(git branch *)",
+      "Bash(git -C * status *)", "Bash(git -C * diff *)", "Bash(git -C * log *)",
+      "Bash(ls *)", "Bash(cat *)", "Bash(head *)", "Bash(tail *)", "Bash(wc *)", "Bash(find *)",
+      "Bash(workspace/bin/*)"
+    ],
+    "deny": [
+      "Bash(git push --force*)", "Bash(git push -f*)",
+      "Bash(rm -rf /*)",
+      "Read(./local/**/*.env*)", "Read(./**/.env)", "Read(./**/.env.local)"
+    ]
+  },
+  "hooks": {}
+}
