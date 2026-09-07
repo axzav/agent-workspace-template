@@ -32,7 +32,39 @@ yaml_list() {
     inl && $0 ~ "^  - "f":" {sub("^  - "f":[ ]*",""); sub(/[ ]*#.*$/,""); gsub(/^"|"$/,""); print}
     inl && $0 ~ "^    "f":" {sub("^    "f":[ ]*",""); sub(/[ ]*#.*$/,""); gsub(/^"|"$/,""); print}' "$MANIFEST"
 }
+# yaml_repo_get <path> <field> — скалярное поле элемента repos[] с данным path (role, stack, status, …)
+yaml_repo_get() {
+  awk -v p="$1" -v f="$2" '
+    /^repos:/ {inl=1; next}
+    inl && /^[^ #]/ {inl=0}
+    inl && $0 ~ "^  - path:[ ]*"p"([ ]*#.*)?$" {cur=1; next}
+    inl && /^  - / {cur=0}
+    inl && cur && $0 ~ "^    "f":" {sub("^    "f":[ ]*",""); sub(/[ ]*#.*$/,""); gsub(/^"|"$/,""); print; exit}' "$MANIFEST"
+}
+# yaml_repo_cmd <path> <name> — команда качества repos[].commands.<name> (пусто — не задана)
+yaml_repo_cmd() {
+  awk -v p="$1" -v n="$2" '
+    /^repos:/ {inl=1; next}
+    inl && /^[^ #]/ {inl=0}
+    inl && $0 ~ "^  - path:[ ]*"p"([ ]*#.*)?$" {cur=1; next}
+    inl && /^  - / {cur=0; inc=0}
+    inl && cur && /^    commands:/ {inc=1; next}
+    inl && cur && inc && /^    [^ ]/ {inc=0}
+    inl && cur && inc && $0 ~ "^      "n":" {sub("^      "n":[ ]*",""); sub(/[ ]*#.*$/,""); gsub(/^"|"$/,""); print; exit}' "$MANIFEST"
+}
+# yaml_repo_modules <path> — path каждого модуля repos[].modules[] (пусто — модулей нет или modules: [])
+yaml_repo_modules() {
+  awk -v p="$1" '
+    /^repos:/ {inl=1; next}
+    inl && /^[^ #]/ {inl=0}
+    inl && $0 ~ "^  - path:[ ]*"p"([ ]*#.*)?$" {cur=1; next}
+    inl && /^  - / {cur=0; inm=0}
+    inl && cur && /^    modules:/ {line=$0; sub(/^    modules:[ ]*/,"",line); sub(/[ ]*#.*$/,"",line); if (line ~ /^\[/) {exit}; inm=1; next}
+    inl && cur && inm && /^    [^ ]/ {inm=0}
+    inl && cur && inm && /^      - path:/ {sub(/^      - path:[ ]*/,""); sub(/[ ]*#.*$/,""); gsub(/^"|"$/,""); print}' "$MANIFEST"
+}
 PROJECT_NAME="$(yaml_get name)"
+PROJECT_KIND="$(yaml_get kind)"; PROJECT_KIND="${PROJECT_KIND:-services}"
 TASK_PREFIX="$(yaml_get task_prefix)"
 LOCAL_PREFIX="$(yaml_get local_prefix)"; LOCAL_PREFIX="${LOCAL_PREFIX:-LOC}"
 TRACKER_MODE="$(yaml_get tracker.mode)"; TRACKER_MODE="${TRACKER_MODE:-local}"

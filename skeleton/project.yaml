@@ -1,11 +1,12 @@
 # Манифест проекта. Источник истины для скриптов workspace/bin и для таблицы сервисов в AGENTS.md.
 name: {{PROJECT}}
 lang: ru
+kind: services                      # services — несколько репо-сервисов; monorepo — один репо с модулями; app — одно приложение
 task_prefix: {{TASK_PREFIX}}        # префикс id задач: {{TASK_PREFIX}}-0001; в remote-режиме = очередь трекера, id = ключ
 local_prefix: LOC                   # remote-режим: префикс задач, которых в трекере нет (LOC-0001)
 
 tracker:
-  mode: local                        # local — только файлы; remote — файлы + удалённый трекер (поле remote: в задачах)
+  mode: {{TRACKER_MODE}}             # local — только файлы; remote — файлы + удалённый трекер (поле remote: в задачах)
   remote_transport: ""               # напр. mcp:ai-toolkit — как публиковать (описание в tracker/AGENTS.md)
 
 repos:                               # порядок = порядок в таблице AGENTS.md и в скриптах
@@ -15,24 +16,36 @@ repos:                               # порядок = порядок в таб
     base_branch: main
     commit_scope: "{{TASK_PREFIX}}-NNN"
     status: active                   # active | wip | stub | deprecated
+    commands:                        # команды качества, как их запускает команда (из корня репо); пусто = нет такой
+      test: "make test"              # stack/cmd.sh <name> [repo] запускает их; healthcheck.sh гоняет smoke по всем репо
+      lint: "make lint"
+      bench: ""
+      smoke: ""
+    modules: []                      # monorepo/app: внутренние границы — [{path: crates/sim, role: ядро, depends: []}];
+                                     # таблица модулей в AGENTS.md сверяется check/manifest.sh
   - path: frontend
     role: веб-приложение
     stack: ""
     base_branch: main
     status: active
+    commands:
+      test: "make test"
+      lint: "make lint"
   - path: infra
     role: локальный стек и деплой
     stack: docker compose, make
     base_branch: main
     status: active
+    commands:
+      smoke: "make smoke"
 
 run:
-  team: "cd infra && make up"        # командный способ; мой (если отличается) — в AGENTS.md и <сервис>/CLAUDE.local.md
-  healthcheck: "cd infra && make smoke"
+  team: "cd infra && make up"        # командный способ поднять всё; мой (если отличается) — в AGENTS.md и <сервис>/CLAUDE.local.md
+  healthcheck: ""                    # общая проверка стека сверх repos[].commands.smoke (напр. curl адресов)
 
 ports:
   app: 8080
   api: 8080
 
 toolkit:                             # внешние наборы скиллов, копируемые в .claude/skills (bin/agent/toolkit-sync.sh)
-  sources: []                        # напр. ["ai-toolkit/skills"]
+  sources: []

@@ -2,12 +2,12 @@
 
 Общий порядок (для любого проекта). Ничего не удалять до шага 7; старое переносить `git mv`/копированием.
 
-1. **Сделать корень репо**: `template/init.sh <name> <PREFIX> <корень>` — существующие файлы не перезаписывает,
+1. **Сделать корень репо**: `template/init.sh <name> <PREFIX> <корень> [local|remote]` — существующие файлы не перезаписывает,
    печатает список пропущенных: их свести с шаблоном вручную (обычно `CLAUDE.md`, `AGENTS.md`, `.gitignore`).
    Проверить, что `.gitignore` — белый список из шаблона, `git status` показывает **только** слой агента,
    а корневой `.ignore` перечисляет все сервисы (`!/<путь>/`) — иначе поиск агента их не видит.
-2. **project.yaml**: перечислить репо (path, role, stack, base_branch, commit_scope, status), порты, `run.team`,
-   `tracker.mode`, `toolkit.sources`.
+2. **project.yaml**: `kind`, репо (path, role, stack, base_branch, commit_scope, status, `commands` качества,
+   для monorepo — `modules`), порты, `run.team`, `tracker.mode`, `toolkit.sources`.
 3. **AGENTS.md корня**: перенести карту, связи, правила из старого корневого `CLAUDE.md`/`workspace/AGENTS.md`.
    Устаревшие tracked-файлы в сервисах перечислить явно. Пути → от корня.
 4. **Личное**: слой агента личный целиком — «как я запускаю» и грабли → `AGENTS.md` корня и

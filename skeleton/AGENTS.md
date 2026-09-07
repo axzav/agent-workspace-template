@@ -27,6 +27,12 @@
 | `infra/` | локальный стек и деплой; **инфра-правки только здесь** | docker compose, make | `main` | | ✅ | `infra/AGENTS.md` |
 
 Статусы: ✅ активно · 🟡 в работе/частично · ⬜ заглушка · ⚠️ устарело, не трогать без явной просьбы.
+{{monorepo/app: таблица модулей — внутренние границы репо (`project.yaml: repos[].modules`, сверяет `check/manifest.sh`):
+
+| Модуль | Роль | Может зависеть от | Не может зависеть от |
+|---|---|---|---|
+| `backend/crates/core/` | {{домен, без I/O}} | — | {{всего остального}} |
+}}
 Инструкции сервисов (`AGENTS.md`, `CLAUDE.md`, их доки), которые пишет команда, — **не редактировать**; мои
 переопределения — только в `<сервис>/CLAUDE.local.md` (не в git сервиса). Устаревшие tracked-файлы инструкций
 перечисли здесь явно: «`<repo>/<file>` — устарел, игнорировать».
@@ -41,13 +47,15 @@
 Командный способ — {{напр.: `cd infra && make up`}}; **мой** (если отличается) — {{напр.: свой compose-project,
 прокси-Makefile; карта команд и грабли — `<сервис>/CLAUDE.local.md`; хук-предохранитель — `local/hooks/`}}.
 Адреса: {{app http://app.{{PROJECT}}.local:8080, api …}}. Порты — в `project.yaml: ports`.
-Команды сервисов (тесты, линт, миграции) — **только через `make` сервиса внутри контейнера**, на хосте нужны
-только `docker` и `git`. Исключения — перечислены в `workspace/docs/dev/README.md`.
+Команды качества сервисов (тесты, линт, бенчмарк, smoke) — **как задано в `project.yaml: repos[].commands`**
+(`workspace/bin/stack/cmd.sh <name> [repo]`, список — `cmd.sh list`), не угадывать по Makefile/package.json.
+{{Что нужно на хосте: напр. только `docker` и `git`, всё остальное в контейнере — или тулчейн стека}}.
+Исключения и нюансы — `workspace/docs/dev/README.md`.
 Тестовые креды локального dev (не прод): {{email / password}}.
 
 ## Флоу задачи
-`/task {{TASK_PREFIX}}-NNNN` → работа → `/task-done` (тела — `workspace/prompts/task.md`, `task-done.md`;
-задача без удалённого трекера — `/next-task`). Кратко:
+`/next-task` (local-режим) или `/task {{TASK_PREFIX}}-NNNN` (remote) → работа → `/task-done`; тела команд —
+`workspace/prompts/`. Кратко:
 1. **Взять:** тикет → локальная папка задачи в `workspace/tracker/tasks/`; прочитать доки сервиса; ветка
    **до первой правки** от свежей базовой.
 2. **Делать:** разведку и план — в `implementation.md` папки задачи; находки «стоило бы» —
@@ -71,7 +79,7 @@
 - `workspace/memory/` — память агента: **только датированные снимки и факты о коде, которых нет в доках**;
   воспроизводимые правила — сюда (в `AGENTS.md`) или в `<сервис>/CLAUDE.local.md`, не в память.
 - `.claude/skills/*` — проектные скиллы; внешние наборы — симлинками или `workspace/bin/agent/toolkit-sync.sh`.
-- `workspace/bin/` — скрипты (`workspace/bin/README.md`): `git/status.sh`, `tracker/trk.sh`, `stack/healthcheck.sh`,
+- `workspace/bin/` — скрипты (`workspace/bin/README.md`): `git/status.sh`, `tracker/trk.sh`, `stack/cmd.sh`, `stack/healthcheck.sh`,
   `check/all.sh`. Все запускаются из любого места, сами переходят в корень.
 - `local/` (не в git) — личные скрипты, хуки, заметки, дампы. `.claude/settings.local.json` — allow-лист,
   `autoMemoryDirectory`, личные хуки (`workspace/bin/agent/setup-local.sh`).

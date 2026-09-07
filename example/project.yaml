@@ -1,5 +1,6 @@
 name: bookly
 lang: ru
+kind: services
 task_prefix: BOOK                     # = очередь трекера: id задачи = ключ BOOK-412
 local_prefix: BKL                     # задачи без тикета: BKL-0001
 
@@ -14,27 +15,38 @@ repos:
     base_branch: main
     commit_scope: "feat(BOOK-NNN)"
     status: active
+    commands:
+      test: "make test"
+      lint: "make lint"
   - path: frontend
     role: веб-приложение гостя и хоста
     stack: React 19, Vite, TypeScript, Tailwind
     base_branch: main
     commit_scope: "feat(BOOK-NNN)"
     status: active
+    commands:
+      test: "make test"
+      lint: "make lint"
+      smoke: "make e2e"
   - path: realtime
     role: WebSocket-уведомления
     stack: Node 22, ws, Redis pub/sub
     base_branch: main
     commit_scope: "feat(BOOK-NNN)"
     status: wip
+    commands:
+      test: "make test"
   - path: infra
     role: локальный стек и деплой
     stack: docker compose, make, nginx
     base_branch: main
     status: active
+    commands:
+      smoke: "make smoke"
 
 run:
   team: "cd infra && make up"
-  healthcheck: "cd infra && make smoke"
+  healthcheck: ""
 
 ports:
   app: 8080

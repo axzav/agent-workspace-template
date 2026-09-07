@@ -8,12 +8,13 @@
 | `git/pull.sh` | `git pull --ff-only` по всем репо на текущих ветках |
 | `tracker/trk.sh board\|ready\|check\|gate\|next-id\|now` | дашборд трекера из frontmatter; `check` — консистентность; `gate` — exit 1, если нечего брать; `now` — время для frontmatter; `next-id` — id локальной задачи |
 | `tracker/trk.sh publish <ID> [--diff\|--json]` | текст описания для удалённого трекера (тело без локальных разделов, переносы склеены, id → ключи); обёртка над `normalize.py` |
-| `stack/healthcheck.sh [фильтр]` | все проверки стека из `project.yaml: run.healthcheck` + smoke-URL |
+| `stack/cmd.sh <name> [repo…]` | запуск команды качества `project.yaml: repos[].commands.<name>` (test/lint/bench/smoke) из корня репо; `list` — что задано |
+| `stack/healthcheck.sh [фильтр]` | `run.healthcheck` + `repos[].commands.smoke` по всем репо, не обрываясь; логи в `local/healthcheck-logs/` |
 | `check/links.sh` | битые относительные пути в `*.md` слоя агента |
 | `check/searchignore.sh` | корневой `.ignore` покрывает все сервисы (иначе Grep/Glob их не видят) |
 | `check/gitignore.sh` | в каждом репо сервиса игнорируются `CLAUDE.local.md`, `*.local*`, `.claude/settings.local.json` (через их `.gitignore` или `<repo>/.git/info/exclude` — командные файлы можно не трогать) |
 | `check/secrets.sh` | похожие на токены строки в файлах под git |
-| `check/manifest.sh` | таблица сервисов в `AGENTS.md` ⊇ `project.yaml: repos` |
+| `check/manifest.sh` | таблица сервисов в `AGENTS.md` ⊇ `project.yaml: repos`; для `repos[].modules` — строки `<repo>/<module>/` |
 | `check/all.sh` | всё выше |
 | `agent/setup-local.sh` | личный слой: `.claude/settings.local.json` (autoMemoryDirectory абсолютным путём), `local/` |
 | `agent/toolkit-sync.sh` | копирует внешние скиллы из `project.yaml: toolkit.sources` в `.claude/skills/` |
