@@ -24,8 +24,9 @@
 5. **`AGENTS.md` каждого сервиса** — черновик по `repo-template/AGENTS.md` и `example/repos/*/AGENTS.md`. Если в репо
    уже есть актуальный `CLAUDE.md`/`AGENTS.md` — не переписывай, предложи только `CLAUDE.md`=`@AGENTS.md` и
    `gitignore.snippet`. Черновики **показать**, в чужие репо не коммитить.
-6. **Личное.** `CLAUDE.local.md` не заполняй (это делает человек); если в корне/репо есть личные файлы
-   (`CLAUDE.local.md`, `Makefile.local`, `_docs/`) — проверь `check/gitignore.sh`, предложи перенос в `local/`.
+6. **Личное.** Секции `AGENTS.md` «мой способ запуска» и `<сервис>/CLAUDE.local.md` не заполняй (это делает
+   человек); если в репо сервисов есть личные файлы (`CLAUDE.local.md`, `Makefile.local`) — проверь
+   `check/gitignore.sh` (не игнорируются — предложи `<repo>/.git/info/exclude`).
 7. **Трекер.** Есть удалённый трекер — `project.yaml: tracker.mode: remote`, `task_prefix` = его очередь (id задачи =
    ключ трекера), `local_prefix` — для задач без тикета. Живые задачи перенести через `/tracker-pull <KEY>` по списку,
    согласованному с пользователем; старые локальные заметки по задачам — в `context/` соответствующих папок.

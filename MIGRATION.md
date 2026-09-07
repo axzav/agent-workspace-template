@@ -10,7 +10,8 @@
    `tracker.mode`, `toolkit.sources`.
 3. **AGENTS.md корня**: перенести карту, связи, правила из старого корневого `CLAUDE.md`/`workspace/AGENTS.md`.
    Устаревшие tracked-файлы в сервисах перечислить явно. Пути → от корня.
-4. **Личное**: всё «как я запускаю» → `CLAUDE.local.md`; личные скрипты/Makefile.local-прокси/хуки → `local/`;
+4. **Личное**: слой агента личный целиком — «как я запускаю» и грабли → `AGENTS.md` корня и
+   `<сервис>/CLAUDE.local.md`; личные скрипты/Makefile.local-прокси/хуки → `local/`;
    `workspace/bin/agent/setup-local.sh`. Секреты из `.mcp.json` → `${VAR}` + `local/.env`; **перевыпустить** засвеченные.
 5. **Знания** → `workspace/docs/` по индексу (knowledgebase / contracts / dev / raw / features).
 6. **Трекер** → `workspace/tracker/`: задачи получают frontmatter (`id` по `PREFIX-NNNN`, старый ключ удалённого

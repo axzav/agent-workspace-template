@@ -5,4 +5,4 @@
   и исключения: `frontend: make e2e` (Playwright), `infra: make smoke`.
 - Платежи локально — sandbox провайдера; ключи в `infra/.env.example` (тестовые). Реальные ключи — только на stage/prod.
 - Окружения: local · stage (`stage.bookly.example.com`, владелец — DevOps) · prod. Ничего на stage/prod без просьбы.
-- Личный способ запуска — `CLAUDE.local.md`; устройство личного слоя — `local-layer.md` (как в скелетоне).
+- Мой способ запуска — `AGENTS.md` корня и `<сервис>/CLAUDE.local.md`; устройство личного слоя — `local-layer.md` (как в скелетоне).

@@ -90,7 +90,7 @@ case "$cmd" in
       [[ -n "$(field "$f" remote)" && -z "$(field "$f" remote_synced)" ]] && warn "$r: файл впереди трекера (remote_synced пуст)"
       n_body=$(awk '/^---$/{c++; next} c>=2' "$f" | wc -l | tr -d ' '); n_body=${n_body:-0}
       lim=70; is_epic "$f" && lim=80
-      [[ "$n_body" -gt $((lim+20)) ]] && warn "$r: постановка $n_body строк (ориентир ≤ $lim) — реализация в implementation.md или дробить"
+      [[ -z "$(field "$f" remote)" && "$n_body" -gt $((lim+20)) ]] && warn "$r: постановка $n_body строк (ориентир ≤ $lim) — реализация в implementation.md или дробить"
     done
     dups=$(all_ids | sort | uniq -d); [[ -n "$dups" ]] && { fail "дубли id: $dups"; rc=1; }
     [[ $rc == 0 ]] && ok "трекер консистентен"; exit $rc

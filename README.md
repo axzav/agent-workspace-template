@@ -7,8 +7,10 @@
 1. **Корень проекта — git-репо слоя агента** (папка называется как угодно). `.gitignore` — белый список: репо сервисов,
    склонированные внутрь, автоматически вне git. Никаких симлинков и генерации.
 2. **Точка входа** — `AGENTS.md` (содержание) + `CLAUDE.md` = `@AGENTS.md`. Так же в каждом сервисе.
-3. **Личное отделено механизмом, а не соглашением**: `CLAUDE.local.md`, `.claude/settings.local.json`, `local/` —
-   в `.gitignore`; их приоритет над командным объявлен одной фразой в `AGENTS.md`.
+3. **Слой агента — личный целиком** (локальный git, команде не показывается), поэтому корневого `CLAUDE.local.md`
+   нет — правила живут прямо в `AGENTS.md`. Личное относительно **команды** — `<сервис>/CLAUDE.local.md`
+   (переопределения командных инструкций; заготовка — `repo-template/CLAUDE.local.md.example`),
+   `.claude/settings.local.json`, `local/` — вне git (в сервисах — их `.gitignore` или `.git/info/exclude`).
 4. **Знания (`workspace/docs`) отдельно от работы (`workspace/tracker`)**, истина по поведению — код. Матрица
    «что изменилось → куда писать».
 5. **Трекер — файлы с frontmatter**, папки по «температуре», эпик — папка с контекстом, дашборд из скрипта.
@@ -45,5 +47,6 @@ git add -A && git commit -m "workspace: init"
 править прямо в проекте и пушить в общий репо для других проектов.
 
 ## Ежедневно
-`/next-task`, `/tracker-add`, `/refine`, `/triage`, `/tracker-check`, `/healthcheck` — шимы в `.claude/commands`,
+`/task` → `/task-done` (remote-трекер), `/next-task` (локальные задачи), `/tracker-add`, `/tracker-pull`,
+`/tracker-comment`, `/refine`, `/triage`, `/tracker-check`, `/healthcheck` — шимы в `.claude/commands`,
 тела в `workspace/prompts`. `workspace/bin/git/status.sh` — состояние всех репо.

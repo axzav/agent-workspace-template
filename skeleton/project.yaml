@@ -27,7 +27,7 @@ repos:                               # порядок = порядок в таб
     status: active
 
 run:
-  team: "cd infra && make up"        # командный способ; личный — в CLAUDE.local.md
+  team: "cd infra && make up"        # командный способ; мой (если отличается) — в AGENTS.md и <сервис>/CLAUDE.local.md
   healthcheck: "cd infra && make smoke"
 
 ports:

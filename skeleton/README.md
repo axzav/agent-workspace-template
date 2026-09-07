@@ -1,6 +1,6 @@
 # {{PROJECT}} — корень проекта
 
-Это репозиторий **слоя агента** (карта, правила, знания, трекер), а не код. Код — в репозиториях сервисов,
+Это **личный** репозиторий слоя агента (карта, правила, знания, трекер), а не код. Код — в репозиториях сервисов,
 которые клонируются сюда как обычные папки и в этот репо не входят.
 
 ## Развернуть с нуля
@@ -10,7 +10,7 @@ git clone <url этого репо> {{PROJECT}} && cd {{PROJECT}}
 git clone <url backend> backend
 git clone <url frontend> frontend
 git clone <url infra> infra
-workspace/bin/agent/setup-local.sh     # личный слой: CLAUDE.local.md, settings.local.json, память
+workspace/bin/agent/setup-local.sh     # личный слой: settings.local.json (память), local/
 workspace/bin/check/all.sh             # проверка: ссылки, gitignore сервисов, секреты, манифест
 ```
 
@@ -19,8 +19,8 @@ workspace/bin/check/all.sh             # проверка: ссылки, gitigno
 
 ## Структура
 ```
-AGENTS.md / CLAUDE.md      карта и правила (команда)
-CLAUDE.local.md            личные переопределения (не в git; пример — CLAUDE.local.md.example)
+AGENTS.md / CLAUDE.md      карта и правила (слой личный целиком; переопределения командных
+                           инструкций сервиса — <сервис>/CLAUDE.local.md, не в git сервиса)
 project.yaml               манифест: репо, префиксы, порты
 .claude/                   settings.json (команда), commands/, skills/, agents/, hooks/
 workspace/docs/            знания      workspace/tracker/   работа      workspace/prompts/  тела промптов

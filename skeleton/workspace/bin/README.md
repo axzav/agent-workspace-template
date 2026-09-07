@@ -11,9 +11,9 @@
 | `stack/healthcheck.sh [фильтр]` | все проверки стека из `project.yaml: run.healthcheck` + smoke-URL |
 | `check/links.sh` | битые относительные пути в `*.md` слоя агента |
 | `check/searchignore.sh` | корневой `.ignore` покрывает все сервисы (иначе Grep/Glob их не видят) |
-| `check/gitignore.sh` | в каждом репо сервиса игнорируются `CLAUDE.local.md`, `*.local*`, `.claude/settings.local.json` |
+| `check/gitignore.sh` | в каждом репо сервиса игнорируются `CLAUDE.local.md`, `*.local*`, `.claude/settings.local.json` (через их `.gitignore` или `<repo>/.git/info/exclude` — командные файлы можно не трогать) |
 | `check/secrets.sh` | похожие на токены строки в файлах под git |
 | `check/manifest.sh` | таблица сервисов в `AGENTS.md` ⊇ `project.yaml: repos` |
 | `check/all.sh` | всё выше |
-| `agent/setup-local.sh` | личный слой: `CLAUDE.local.md`, `.claude/settings.local.json` (autoMemoryDirectory абсолютным путём), `local/` |
+| `agent/setup-local.sh` | личный слой: `.claude/settings.local.json` (autoMemoryDirectory абсолютным путём), `local/` |
 | `agent/toolkit-sync.sh` | копирует внешние скиллы из `project.yaml: toolkit.sources` в `.claude/skills/` |

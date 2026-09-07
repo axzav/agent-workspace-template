@@ -3,7 +3,7 @@ id: {{TASK_PREFIX}}-0000
 type: task
 title: Короткое название
 status: todo
-priority: normal
+priority: normal      # priority/size/estimation/repos/depends — необязательны у привязанных к трекеру задач
 size: M
 estimation: ""
 repos: []

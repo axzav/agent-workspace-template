@@ -6,14 +6,12 @@
 !/README.md
 !/CLAUDE.md
 !/AGENTS.md
-!/CLAUDE.local.md.example
 !/project.yaml
 !/.mcp.json
 !/.claude/
 !/workspace/
 
 # Личное — никогда не коммитится
-/CLAUDE.local.md
 /.claude/settings.local.json
 /.claude/worktrees/
 /.claude/plans/
@@ -24,4 +22,3 @@
 .DS_Store
 .idea/
 .playwright-mcp/
-next-batch-log/
