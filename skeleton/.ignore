@@ -3,3 +3,5 @@
 # .ignore имеет приоритет над .gitignore для поисковых инструментов; git его не читает.
 # По строке !/<путь>/ на каждый repos[].path из project.yaml (сверяет check/searchignore.sh):
 !/backend/
+!/frontend/
+!/infra/

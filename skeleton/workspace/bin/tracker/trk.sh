@@ -50,6 +50,9 @@ case "$cmd" in
       ep=$(epic_of "$f"); [[ -n "$ep" ]] && [[ "$(field "$ep" status)" =~ ^(needs-decision|parked|someday|done)$ ]] && continue
       blocked=0
       for d in $(field "$f" depends | tr -d '[],'); do
+        if [[ "$d" == ADR-* ]]; then   # решение: блокирует, пока ADR не accepted
+          af=$(grep -l --include='*.md' "^id: $d\$" "$ADR_DIR"/*.md 2>/dev/null | head -1)
+          [[ -z "$af" || "$(field "$af" status)" != "accepted" ]] && blocked=1; continue; fi
         df=$(grep -rl --include='*.md' "^id: $d\$" "$TR/tasks" "$TR/parked" 2>/dev/null | head -1)
         [[ -n "$df" && "$(field "$df" status)" != "done" ]] && blocked=1
       done
@@ -74,6 +77,10 @@ case "$cmd" in
       [[ "$TRACKER_MODE" == "remote" && "$pfx" == "$TASK_PREFIX" && -z "$rm_" ]] && { fail "$r: id с префиксом трекера, но remote: пуст — локальная задача должна быть $LOCAL_PREFIX-NNNN"; rc=1; }
       for k in title status created; do [[ -z "$(field "$f" $k)" ]] && { fail "$r: нет поля $k"; rc=1; }; done
       [[ "$st" == "done" && -z "$(field "$f" closed)" ]] && { fail "$r: status done без closed:"; rc=1; }
+      for d in $(field "$f" depends | tr -d '[],'); do
+        if [[ "$d" == ADR-* ]]; then grep -lq --include='*.md' "^id: $d\$" "$ADR_DIR"/*.md 2>/dev/null || { fail "$r: depends: $d — нет такого ADR в workspace/docs/decisions/"; rc=1; }
+        else grep -rlq --include='*.md' "^id: $d\$" "$TR" 2>/dev/null || { fail "$r: depends: $d — нет такой задачи"; rc=1; }; fi
+      done
       if is_epic "$f"; then
         is_unit_dir_main "$f" || { fail "$r: эпик (type: epic) должен быть папкой ${id}-slug/ с файлом того же имени"; rc=1; }
         is_unit_dir_main "$f" && for sub in $(items "$(dirname "$f")"); do is_epic "$sub" && { fail "$(rel "$sub"): эпик внутри эпика"; rc=1; }; done

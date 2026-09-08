@@ -5,6 +5,7 @@ WS_BIN="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PROJECT_ROOT="$(cd "$WS_BIN/../.." && pwd)"
 WS_DIR="$PROJECT_ROOT/workspace"
 MANIFEST="$PROJECT_ROOT/project.yaml"
+ADR_DIR="$WS_DIR/docs/decisions"
 cd "$PROJECT_ROOT"
 
 # yaml_get <key> — скалярное значение верхнего уровня или "a.b" (два уровня, без списков)

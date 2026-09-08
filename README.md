@@ -13,6 +13,8 @@
    `.claude/settings.local.json`, `local/` — вне git (в сервисах — их `.gitignore` или `.git/info/exclude`).
 4. **Знания (`workspace/docs`) отдельно от работы (`workspace/tracker`)**, истина по поведению — код. Матрица
    «что изменилось → куда писать».
+   Архитектурные решения — ADR (`workspace/docs/decisions`): агент готовит `proposed`, человек принимает,
+   задачи блокируются на решение через `depends: [ADR-NNNN]`.
 5. **Трекер — файлы с frontmatter**, папки по «температуре», эпик — папка с контекстом, дашборд из скрипта.
    Режим `remote` — публикация тела задачи через `trk.sh publish` (нормализация, id → ключи, diff).
 6. **Всё внутри папки проекта**: скиллы (внешние — копиями через `toolkit-sync.sh`), память (`workspace/memory`).
@@ -54,6 +56,6 @@ git add -A && git commit -m "workspace: init"
 
 ## Ежедневно
 `/next-task` → `/task-done` (локальные задачи), `/tracker-add`, `/refine`, `/triage`, `/tracker-check`, `/estimate`,
-`/healthcheck`; в remote-режиме ещё `/task` → `/task-done`, `/tracker-pull`, `/tracker-comment`, `/fix-mr` — шимы
+`/healthcheck`, `/adr` (ADR в `workspace/docs/decisions/`, `bin/docs/adr.sh`; задачи ждут решения через `depends: [ADR-NNNN]`); в remote-режиме ещё `/task` → `/task-done`, `/tracker-pull`, `/tracker-comment`, `/fix-mr` — шимы
 в `.claude/commands`, тела в `workspace/prompts`. `workspace/bin/git/status.sh` — состояние всех репо,
 `workspace/bin/stack/cmd.sh test|lint|bench|smoke [repo]` — команды качества из манифеста.

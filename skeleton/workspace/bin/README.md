@@ -10,6 +10,7 @@
 | `tracker/trk.sh publish <ID> [--diff\|--json]` | текст описания для удалённого трекера (тело без локальных разделов, переносы склеены, id → ключи); обёртка над `normalize.py` |
 | `stack/cmd.sh <name> [repo…]` | запуск команды качества `project.yaml: repos[].commands.<name>` (test/lint/bench/smoke) из корня репо; `list` — что задано |
 | `stack/healthcheck.sh [фильтр]` | `run.healthcheck` + `repos[].commands.smoke` по всем репо, не обрываясь; логи в `local/healthcheck-logs/` |
+| `docs/adr.sh new\|list\|check\|accept\|supersede\|index` | ADR в `workspace/docs/decisions/`: номер и файл из шаблона, индекс в README, проверка статусов и ссылок замены; `accept` — только по решению человека |
 | `check/links.sh` | битые относительные пути в `*.md` слоя агента |
 | `check/searchignore.sh` | корневой `.ignore` покрывает все сервисы (иначе Grep/Glob их не видят) |
 | `check/gitignore.sh` | в каждом репо сервиса игнорируются `CLAUDE.local.md`, `*.local*`, `.claude/settings.local.json` (через их `.gitignore` или `<repo>/.git/info/exclude` — командные файлы можно не трогать) |
