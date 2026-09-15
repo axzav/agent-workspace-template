@@ -5,7 +5,7 @@ source "$(dirname "${BASH_SOURCE[0]}")/../lib/common.sh"
 name="${1:-}"; shift || true
 [[ -n "$name" ]] || { sed -n 3,5p "$0"; exit 2; }
 if [[ "$name" == list ]]; then
-  for r in ${REPOS[@]+"${REPOS[@]}"}; do for n in test lint bench smoke; do c="$(yaml_repo_cmd "$r" "$n")"; [[ -n "$c" ]] && printf "%-12s %-8s %s\n" "$r" "$n" "$c"; done; done; exit 0; fi
+  for r in ${REPOS[@]+"${REPOS[@]}"}; do for n in $(yaml_repo_cmds "$r"); do printf "%-12s %-10s %s\n" "$r" "$n" "$(yaml_repo_cmd "$r" "$n")"; done; done; exit 0; fi
 targets=("$@"); [[ ${#targets[@]} -eq 0 ]] && targets=(${REPOS[@]+"${REPOS[@]}"})
 rc=0; ran=0
 for r in "${targets[@]}"; do

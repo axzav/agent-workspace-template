@@ -21,7 +21,7 @@ yaml_get() {
     awk -v k="$key" '$0 ~ "^"k":" {sub("^"k":[ ]*",""); sub(/[ ]*#.*$/,""); gsub(/^"|"$/,""); print; exit}' "$MANIFEST"
   fi
 }
-# yaml_list <top>.<field> — значения поля field у элементов списка top (repos.path, toolkit.sources как inline-список)
+# yaml_list <top>.<field> — значения поля field у элементов списка top (repos.path); inline-список [a, b] тоже читается
 yaml_list() {
   local top="${1%%.*}" field="${1#*.}"
   awk -v t="$top" -v f="$field" '
@@ -53,22 +53,22 @@ yaml_repo_cmd() {
     inl && cur && inc && /^    [^ ]/ {inc=0}
     inl && cur && inc && $0 ~ "^      "n":" {sub("^      "n":[ ]*",""); sub(/[ ]*#.*$/,""); gsub(/^"|"$/,""); print; exit}' "$MANIFEST"
 }
-# yaml_repo_modules <path> — path каждого модуля repos[].modules[] (пусто — модулей нет или modules: [])
-yaml_repo_modules() {
+# yaml_repo_cmds <path> — имена команд качества repos[].commands элемента с данным path
+yaml_repo_cmds() {
   awk -v p="$1" '
     /^repos:/ {inl=1; next}
     inl && /^[^ #]/ {inl=0}
     inl && $0 ~ "^  - path:[ ]*"p"([ ]*#.*)?$" {cur=1; next}
-    inl && /^  - / {cur=0; inm=0}
-    inl && cur && /^    modules:/ {line=$0; sub(/^    modules:[ ]*/,"",line); sub(/[ ]*#.*$/,"",line); if (line ~ /^\[/) {exit}; inm=1; next}
-    inl && cur && inm && /^    [^ ]/ {inm=0}
-    inl && cur && inm && /^      - path:/ {sub(/^      - path:[ ]*/,""); sub(/[ ]*#.*$/,""); gsub(/^"|"$/,""); print}' "$MANIFEST"
+    inl && /^  - / {cur=0; inc=0}
+    inl && cur && /^    commands:/ {inc=1; next}
+    inl && cur && inc && /^    [^ ]/ {inc=0}
+    inl && cur && inc && /^      [A-Za-z_-]+:/ {n=$1; sub(/:$/,"",n); v=$0; sub(/^      [A-Za-z_-]+:[ ]*/,"",v); sub(/[ ]*#.*$/,"",v); gsub(/^"|"$/,"",v); if (v!="") print n}' "$MANIFEST"
 }
 PROJECT_NAME="$(yaml_get name)"
-PROJECT_KIND="$(yaml_get kind)"; PROJECT_KIND="${PROJECT_KIND:-services}"
+PROJECT_KIND="$(yaml_get profile.kind)"; PROJECT_KIND="${PROJECT_KIND:-services}"
 TASK_PREFIX="$(yaml_get task_prefix)"
+TRACKER_MODE="$(yaml_get profile.tracker)"; TRACKER_MODE="${TRACKER_MODE:-local}"
 LOCAL_PREFIX="$(yaml_get local_prefix)"; LOCAL_PREFIX="${LOCAL_PREFIX:-LOC}"
-TRACKER_MODE="$(yaml_get tracker.mode)"; TRACKER_MODE="${TRACKER_MODE:-local}"
 REPOS=()
 while IFS= read -r r; do [[ -n "$r" ]] && REPOS+=("$r"); done < <(yaml_list repos.path)
 

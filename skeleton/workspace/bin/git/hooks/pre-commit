@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Pre-commit корневого репо (ставит workspace/bin/agent/setup-local.sh через core.hooksPath): полный набор проверок
+# слоя — workspace/bin/check/all.sh (ссылки, gitignore репо, .ignore, секреты, манифест, ADR, трекер), секунды.
+# Пропустить один раз: git commit --no-verify.
+set -euo pipefail
+root=$(git rev-parse --show-toplevel)
+"$root/workspace/bin/check/all.sh" >/dev/null && exit 0
+"$root/workspace/bin/check/all.sh" 2>&1 | grep '✖' >&2 || true
+echo "✖ pre-commit: исправь замечания выше или git commit --no-verify" >&2
+exit 1

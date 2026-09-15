@@ -1,28 +1,34 @@
-# Манифест проекта. Источник истины для скриптов workspace/bin и для таблицы сервисов в AGENTS.md.
+# Данные для скриптов workspace/bin (lib/common.sh читает их отсюда) и профиль, по которому init.sh развернул слой.
+# Агент сюда не ходит: значения уже подставлены в инструкции; менять при смене репо, команд или префикса.
 name: {{PROJECT}}
 lang: ru
-kind: services                      # services — несколько репо-сервисов; monorepo — один репо с модулями; app — одно приложение
-task_prefix: {{TASK_PREFIX}}        # префикс id задач: {{TASK_PREFIX}}-0001; в remote-режиме = очередь трекера, id = ключ
-local_prefix: LOC                   # remote-режим: префикс задач, которых в трекере нет (LOC-0001)
+task_prefix: {{TASK_PREFIX}}        # префикс id задач: {{TASK_PREFIX}}-0001; с удалённым трекером — его очередь, id задачи = ключ
 
+profile:                            # ответы init.sh; поменял — запусти agent-workspace-template/init.sh ещё раз (доложит файлы)
+  kind: {{KIND}}                    # services — несколько репо; monorepo — один репо с модулями; app — одно приложение
+  team: {{TEAM}}                    # solo — решения и план здесь; team — трекер и доки команды первичны, здесь копии
+  tracker: {{TRACKER}}              # local — задачи только в файлах; remote — удалённый трекер, здесь зеркало
+  commit: {{COMMIT}}                # auto — коммит по завершении задачи сразу; ask — спросить (ревью человека)
+  adr: {{ADR}}                      # ADR и обсуждения переработок в личном слое
+  estimates: {{ESTIMATES}}          # /estimate и поле estimation
+  toolkit: {{TOOLKIT}}              # внешние наборы скиллов (bin/agent/toolkit-sync.sh)
+{{#if tracker=remote}}
+local_prefix: {{LOCAL_PREFIX}}      # задачи, которых в трекере нет: {{LOCAL_PREFIX}}-0001
 tracker:
-  mode: {{TRACKER_MODE}}             # local — только файлы; remote — файлы + удалённый трекер (поле remote: в задачах)
-  remote_transport: ""               # напр. mcp:ai-toolkit — как публиковать (описание в tracker/AGENTS.md)
+  remote_transport: ""              # напр. mcp:tracker — чем публиковать и подтягивать (описание — workspace/tracker/AGENTS.md)
+{{/if}}
 
-repos:                               # порядок = порядок в таблице AGENTS.md и в скриптах
+repos:                              # порядок = порядок в карте проекта AGENTS.md и в скриптах
+{{#if kind=services}}
   - path: backend
     role: API и бизнес-логика
     stack: ""
     base_branch: main
     commit_scope: "{{TASK_PREFIX}}-NNN"
-    status: active                   # active | wip | stub | deprecated
-    commands:                        # команды качества, как их запускает команда (из корня репо); пусто = нет такой
-      test: "make test"              # stack/cmd.sh <name> [repo] запускает их; healthcheck.sh гоняет smoke по всем репо
+    status: active                  # active | wip | stub | deprecated
+    commands:                       # команды качества, как их запускает команда (из корня репо); нет команды — нет ключа
+      test: "make test"             # workspace/bin/stack/cmd.sh <name> [repo] запускает их; healthcheck.sh гоняет smoke по всем репо
       lint: "make lint"
-      bench: ""
-      smoke: ""
-    modules: []                      # monorepo/app: внутренние границы — [{path: crates/sim, role: ядро, depends: []}];
-                                     # таблица модулей в AGENTS.md сверяется check/manifest.sh
   - path: frontend
     role: веб-приложение
     stack: ""
@@ -40,12 +46,25 @@ repos:                               # порядок = порядок в таб
       smoke: "make smoke"
 
 run:
-  team: "cd infra && make up"        # командный способ поднять всё; мой (если отличается) — в AGENTS.md и <сервис>/CLAUDE.local.md
-  healthcheck: ""                    # общая проверка стека сверх repos[].commands.smoke (напр. curl адресов)
+  team: "cd infra && make up"       # командный способ поднять всё; мой — <сервис>/CLAUDE.local.md
+  healthcheck: ""                   # общая проверка стека сверх repos[].commands.smoke (напр. curl адресов)
 
 ports:
   app: 8080
   api: 8080
+{{#else}}
+  - path: {{REPO}}                  # репозиторий кода; локальный git или клон
+    role: ""
+    stack: ""
+    base_branch: main
+    commit_scope: "{{TASK_PREFIX}}-NNNN"
+    status: active                  # active | wip | stub | deprecated
+    commands:                       # команды качества из корня репо (workspace/bin/stack/cmd.sh <name>); нет команды — нет ключа
+      test: ""
+      lint: ""
+{{/if}}
+{{#if toolkit}}
 
-toolkit:                             # внешние наборы скиллов, копируемые в .claude/skills (bin/agent/toolkit-sync.sh)
+toolkit:                            # внешние наборы скиллов, копируемые в .claude/skills (bin/agent/toolkit-sync.sh)
   sources: []
+{{/if}}

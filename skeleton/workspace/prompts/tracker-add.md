@@ -1,9 +1,14 @@
 # /tracker-add — завести задачу
-Из аргумента собрать задачу по `workspace/tracker/TEMPLATE-task.md`. Id: локальный режим или задача без тикета —
-`trk.sh next-id`; задача для удалённого трекера — сначала создать тикет через `tracker.remote_transport` (заголовок +
-постановка), id = его ключ, `remote` = ключ, `remote_synced` = `trk.sh now`. Далее title, repos (из
-`project.yaml`), size (грубо, без анализа кода; `estimation` не трогать), `created` = `trk.sh now`, epic если назван.
-Разделы — по правилам `workspace/tracker/AGENTS.md` («Главный файл и implementation.md»). Показать файл целиком, после
-подтверждения записать в `tasks/` (или в папку эпика). Сомневаешься в формате — эталоны в клоне шаблона:
-`agent-workspace-template/example/workspace/tracker` (задача BOOK-431, эпик BOOK-430, вопросы BOOK-434, баг
-BOOK-440); не читать их без нужды.
+{{#if tracker=remote}}
+Задача для удалённого трекера — сначала тикет через `tracker.remote_transport` (заголовок + постановка), id = его ключ,
+`remote` = ключ, `remote_synced` = `trk.sh now`; задача без тикета — id `trk.sh next-id` (`{{LOCAL_PREFIX}}-NNNN`).
+{{/if}}
+Из аргумента собрать задачу по `workspace/tracker/TEMPLATE-task.md`: id — `workspace/bin/tracker/trk.sh next-id`,
+title, repos (из `project.yaml`), size (грубо, без анализа кода), `created` = `trk.sh now`, эпик, если назван (тогда
+файл — в папку эпика и строка в его «Состав работ»). Разделы и текст — по `workspace/tracker/AGENTS.md` («Файлы
+задачи», «Как писать»). Критерии готовности — наблюдаемые результаты, не действия; число — с тем, что считается и в
+каком сценарии. Перед показом перечитать глазами исполнителя, который не видел обсуждения: понятно ли без переписки
+и соседних задач. Детали реализации из аргумента не выбрасывать — в `implementation.md` (после записи `trk.sh
+promote`), показать вместе с постановкой. Показать файл целиком, после подтверждения записать в `tasks/` (или в
+папку эпика). Сомневаешься в формате — эталоны в клоне шаблона `agent-workspace-template/example/workspace/tracker/`
+(задача BOOK-431, эпик BOOK-430, вопросы BOOK-434, баг BOOK-440); не читать их без нужды.

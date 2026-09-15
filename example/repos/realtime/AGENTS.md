@@ -1,6 +1,5 @@
 # realtime — инструкции для агента
 
-> Карта проекта и трекер — в родительской папке (`../AGENTS.md`). Пути здесь — от корня этого репозитория.
 
 ## Что это
 WebSocket-сервер уведомлений: подписывается на Redis-каналы `booking.*`, `message.*` и рассылает клиентам по
@@ -14,7 +13,7 @@ Node 22 · ws · ioredis · jose.
 
 ## Структура
 `src/server.ts` (подключения), `src/subscriptions/` (каналы), `src/auth.ts`. Формат событий — контракт
-в `../workspace/docs/contracts/events/` (монтируется в `/contracts`, контракт-тесты в `test/contracts/`).
+в репо contracts команды (монтируется в `/contracts`, контракт-тесты в `test/contracts/`).
 
 ## Git
 База — `main`; `feat(BOOK-NNN): …`; спросить перед коммитом; push — только по просьбе.

@@ -1,6 +1,5 @@
 # infra — инструкции для агента
 
-> Карта проекта — в родительской папке (`../AGENTS.md`). Пути здесь — от корня этого репозитория.
 
 ## Рамка репозитория
 Здесь живут: `compose.yaml`, `nginx/`, `Makefile` (up/down/ps/logs/smoke/bootstrap), `keys/` (dev-ключи JWT), `.env.example`.

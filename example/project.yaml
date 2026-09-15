@@ -1,12 +1,19 @@
+# Данные для скриптов workspace/bin и профиль, по которому init.sh развернул слой. Агент сюда не ходит.
 name: bookly
 lang: ru
-kind: services
 task_prefix: BOOK                     # = очередь трекера: id задачи = ключ BOOK-412
-local_prefix: BKL                     # задачи без тикета: BKL-0001
 
+profile:
+  kind: services
+  team: team
+  tracker: remote
+  commit: ask
+  adr: no
+  estimates: yes
+  toolkit: no
+local_prefix: BKL                     # задачи без тикета: BKL-0001
 tracker:
-  mode: remote
-  remote_transport: mcp:tracker        # публикация описания (trk.sh publish --json) через MCP-сервер tracker
+  remote_transport: mcp:tracker        # публикация описания (trk.sh publish --json) и подтягивание через MCP-сервер tracker
 
 repos:
   - path: backend
@@ -46,13 +53,9 @@ repos:
 
 run:
   team: "cd infra && make up"
-  healthcheck: ""
 
 ports:
   app: 8080
   api: 8080
   postgres: 5432
   rabbitmq_ui: 15672
-
-toolkit:
-  sources: []
