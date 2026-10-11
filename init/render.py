@@ -8,7 +8,8 @@
 неизвестные {{…}} остаются как есть — это плейсхолдеры для засева (SEED). Условные блоки — построчно, директива на
 своей строке: {{#if EXPR}} … {{#else}} … {{/if}} (внутри строки — тоже, без вложенности); EXPR — `key` (истина: true/yes/1), `!key`, `key=v1|v2`, несколько
 через `&`. Вложенность допустима. Файлы по профилю — таблица profiles.txt: «glob  EXPR», без строки — ставится всегда;
-skeleton/_claude → .claude."""
+skeleton/_claude → .claude, skeleton/_gitignore → .gitignore (иначе белый список
+скелета действовал бы внутри репо шаблона)."""
 import fnmatch, os, re, sys
 
 DIRECTIVE = re.compile(r'^\s*\{\{(#if\s+(?P<expr>[^}]+)|#else|/if)\}\}\s*$')
@@ -109,7 +110,7 @@ def main(argv):
             rel = os.path.relpath(full, src)
             if not wanted(rel, rules, vars_):
                 profiled.append(rel); continue
-            out_rel = re.sub(r'^_claude/', '.claude/', rel)
+            out_rel = re.sub(r'^_gitignore$', '.gitignore', re.sub(r'^_claude/', '.claude/', rel))
             out = os.path.join(dst, out_rel)
             if os.path.exists(out):
                 skipped.append(out_rel); continue

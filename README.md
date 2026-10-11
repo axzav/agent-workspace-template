@@ -50,11 +50,14 @@
 init.sh             фаза 1: развернуть skeleton/ в корень по профилю (флаги или вопросы; повторный запуск — доложить);
                     init.sh render <файл> — отрендерить файл repo-template/ по профилю проекта
 init/               render.py (подстановки и {{#if}}), profiles.txt (файл → условие)
+sync.sh             развёрнутый слой ↔ шаблон: status/diff — расхождения по профилю, pull — изменения шаблона в проект,
+                    push — правки проекта в skeleton/ (трёхстороннее слияние от маркера project.yaml: template), mark
 SEED.md             фаза 2: промпт агенту — заполнить карту, манифест, правила, AGENTS.md репо по example/;
                     путь A (репо есть) и путь B (greenfield: только концепт-доки)
 SEED-DOCS.md        отдельная команда: наполнить базу знаний по коду (по областям)
 PRINCIPLES.md       принципы устройства инструкций и доков, по которым собран шаблон (из рефактора живого проекта)
-skeleton/           сам шаблон (плейсхолдеры {{PROJECT}}, {{TASK_PREFIX}}, {{REPO}}, {{…}} для SEED; skeleton/_claude → .claude)
+skeleton/           сам шаблон (плейсхолдеры {{PROJECT}}, {{TASK_PREFIX}}, {{REPO}}, {{…}} для SEED; _claude → .claude,
+                    _gitignore → .gitignore при рендере)
 example/            заполненный пример — проект Bookly (kind: services, team, remote-трекер): эталон для SEED
 repo-template/      заготовки для репо кода: AGENTS.md, CLAUDE.md, CLAUDE.local.md.example, gitignore.snippet,
                     docs/README.md (карта «код → техдок»), scripts/check-docs.sh (гейт ссылок и свежести техдоков)
@@ -79,8 +82,18 @@ git add -A && git commit -m "workspace: init"
 прямо в проекте и пушить в общий репо для других проектов. Описание корня для людей — в `AGENTS.md`
 (отдельный `README.md` скелет не создаёт).
 
+## Обновление слоя и возврат правок в шаблон
+Клон шаблона лежит в корне проекта; точка последней сходимости — `project.yaml: template` (`commit` шаблона,
+`project_commit` корня; пишет `init.sh` и `sync.sh mark`). `sync.sh status` — что расходится (проектные файлы вроде
+`AGENTS.md`, манифеста и карт доков не сверяются; свои добавить в `template.skip`); `sync.sh pull` — дельта шаблона с
+маркера сливается в файлы проекта, специализация (имя репо, термины продукта) сохраняется; `sync.sh push` — правки
+проекта с маркера сливаются в `skeleton/`, дальше обобщить руками (`{{REPO}}`, общие термины, `{{#if}}` по профилю) и
+закоммитить шаблон. Конфликты — маркеры `<<<<<<<` в файле, код 1, маркер не двигается. В Claude Code всё это делает
+`/template-sync`: гоняет скрипт, разбирает конфликты, обобщает формулировки, обновляет `PRINCIPLES.md`.
+
 ## Ежедневно
 `/next-task [ID|KEY]` (взять или продолжить, сделать, сдать), `/tracker-add`, `/refine [текст]`; по профилю — `/adr`,
-`/tracker-pull`, `/tracker-comment`, `/task-description`, `/fix-mr`, `/estimate`, `/healthcheck` — шимы в
+`/tracker-pull`, `/tracker-comment`, `/task-description`, `/fix-mr`, `/estimate`, `/healthcheck`; `/template-sync` — сверка
+с шаблоном (раздел выше) — шимы в
 `.claude/commands`, тела в `workspace/prompts`. Скрипты — `workspace/bin/README.md`: `git/status.sh` — состояние всех
 репо, `stack/cmd.sh <команда> [repo]` — команды качества из манифеста, `check/all.sh` — проверки слоя (и хук pre-commit).

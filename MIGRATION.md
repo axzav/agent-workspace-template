@@ -26,4 +26,5 @@
    ссылок на слой агента.
 8. **Скиллы/команды**: проектные — в `.claude/`, внешние — профиль `toolkit` (`toolkit-sync.sh`). Старые симлинки
    удалить.
-9. `workspace/bin/check/all.sh` зелёный → commit → remote для корневого репо (по желанию).
+9. `workspace/bin/check/all.sh` зелёный → commit → `agent-workspace-template/sync.sh mark` (маркер для будущих
+   `sync.sh pull`/`push`, см. README «Обновление слоя») → remote для корневого репо (по желанию).

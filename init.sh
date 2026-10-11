@@ -4,6 +4,7 @@
 #   init.sh [DST] [--name ИМЯ] [--prefix ПРЕФИКС] [--repo ПАПКА] [--kind services|monorepo|app] [--team solo|team]
 #           [--tracker local|remote] [--commit auto|ask] [--adr yes|no] [--estimates yes|no] [--toolkit yes|no] [--yes]
 #   init.sh render <файл>          напечатать файл шаблона (repo-template/…) по профилю project.yaml текущего проекта
+# Обновлять уже развёрнутый слой и возвращать его правки в шаблон — sync.sh (status | diff | pull | push | mark).
 #
 # Чего не хватает во флагах — спросит (терминал) или возьмёт по умолчанию (--yes или не терминал). Ответы пишутся в
 # project.yaml: profile; повторный запуск в том же корне читает их оттуда, существующие файлы не трогает и докладывает
@@ -69,6 +70,7 @@ for k in kind team tracker commit adr estimates toolkit; do var="P_$k"; SETS+=(-
 echo "профиль: name=$P_name prefix=$P_prefix repo=${P_repo:-—} kind=$P_kind team=$P_team tracker=$P_tracker commit=$P_commit adr=$P_adr estimates=$P_estimates toolkit=$P_toolkit"
 python3 "$RENDER" "${SETS[@]}" --profiles "$PROFILES" "$SRC" "$DST"
 [[ -d "$DST/.git" ]] || { git -C "$DST" init -q; echo "git init: $DST"; }
+[[ -n "$(yget "$M" template.commit)" ]] || "$HERE/sync.sh" "$DST" mark 2>/dev/null || true   # маркер сходимости для sync.sh
 echo "готово: $DST"
 echo "дальше: склонируй репо (или положи концепт-доки в workspace/docs/), затем в Claude Code из корня — /seed (SEED.md);"
 echo "        workspace/bin/agent/setup-local.sh — личный слой и хук pre-commit; workspace/bin/check/all.sh — проверки"
