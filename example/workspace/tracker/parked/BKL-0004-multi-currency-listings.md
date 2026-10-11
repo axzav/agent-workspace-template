@@ -5,7 +5,6 @@ title: Цены объектов в нескольких валютах
 status: parked
 priority: later
 size: L
-estimation: ""
 repos: [backend, frontend]
 depends: []
 remote: ""

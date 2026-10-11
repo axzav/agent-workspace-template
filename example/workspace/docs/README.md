@@ -7,7 +7,7 @@
 |---|---|---|---|
 | 1 · что и почему | Confluence «Bookly / Product», `backend/docs/rfc/` | видение продукта, RFC по границам и контрактам (команда) | перед работой над продуктом; ссылки, не копии |
 | 2 · как устроено | `knowledgebase/01-booking-lifecycle.md` | статусы брони, кто и когда может менять | любая задача про бронирования |
-| 2 | `knowledgebase/02-cancellation-and-refunds.md` | политика отмены, расчёт возврата (UC-020…UC-024) | эпик BOOK-400 |
+| 2 | `knowledgebase/02-cancellation-and-refunds.md` | политика отмены, расчёт возврата (UC-020…UC-024) | задача BOOK-440 |
 | 2 | `contracts/events/` | события `booking.*` — JSON Schema + фикстуры | правка backend↔realtime↔workers |
 | 2 | `dev/README.md` | командный стек, sandbox платежей, окружения | запуск/диагностика |
 | 3 · сырьё | `raw/` | треды и тикеты «как есть»; устаревает | только за обоснованиями |

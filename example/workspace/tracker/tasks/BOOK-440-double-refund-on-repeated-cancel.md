@@ -5,7 +5,6 @@ title: Повторная отмена брони создаёт второй в
 status: todo
 priority: now
 size: S
-estimation: ""
 repos: [backend]
 depends: []
 remote: BOOK-440

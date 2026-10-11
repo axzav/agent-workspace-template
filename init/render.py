@@ -104,8 +104,11 @@ def main(argv):
     src, dst = args
     rules = load_profiles(profiles)
     skipped, profiled, written = [], [], []
-    for root, _, files in os.walk(src):
+    for root, dirs, files in os.walk(src):
+        dirs[:] = [d for d in dirs if d not in ('__pycache__', '.git')]
         for name in files:
+            if name.endswith(('.pyc', '.DS_Store')):
+                continue
             full = os.path.join(root, name)
             rel = os.path.relpath(full, src)
             if not wanted(rel, rules, vars_):

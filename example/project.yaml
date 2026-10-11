@@ -1,7 +1,7 @@
 # Данные для скриптов workspace/bin и профиль, по которому init.sh развернул слой. Агент сюда не ходит.
 name: bookly
 lang: ru
-task_prefix: BOOK                     # = очередь трекера: id задачи = ключ BOOK-412
+task_prefix: BOOK                     # = очередь трекера: id задачи = ключ BOOK-431
 
 profile:
   kind: services
@@ -9,8 +9,6 @@ profile:
   tracker: remote
   commit: ask
   adr: no
-  estimates: yes
-  toolkit: no
 local_prefix: BKL                     # задачи без тикета: BKL-0001
 tracker:
   remote_transport: mcp:tracker        # публикация описания (trk.sh publish --json) и подтягивание через MCP-сервер tracker

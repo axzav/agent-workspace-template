@@ -5,7 +5,6 @@ title: Инициализировать слой агента из agent-workspa
 status: done
 priority: now
 size: S
-estimation: ""
 repos: []
 depends: []
 remote: ""

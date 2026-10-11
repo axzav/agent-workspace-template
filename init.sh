@@ -2,7 +2,7 @@
 # Развернуть скелет слоя агента в корень проекта по профилю (фаза 1; фаза 2 — SEED.md в Claude Code).
 #
 #   init.sh [DST] [--name ИМЯ] [--prefix ПРЕФИКС] [--repo ПАПКА] [--kind services|monorepo|app] [--team solo|team]
-#           [--tracker local|remote] [--commit auto|ask] [--adr yes|no] [--estimates yes|no] [--toolkit yes|no] [--yes]
+#           [--tracker local|remote] [--commit auto|ask] [--adr yes|no] [--yes]
 #   init.sh render <файл>          напечатать файл шаблона (repo-template/…) по профилю project.yaml текущего проекта
 # Обновлять уже развёрнутый слой и возвращать его правки в шаблон — sync.sh (status | diff | pull | push | mark).
 #
@@ -24,14 +24,14 @@ yrepo() { awk '/^repos:/{f=1;next} f&&/^  - path:/{sub(/^  - path:[ ]*/,"");sub(
 if [[ "${1:-}" == render ]]; then
   f="${2:?init.sh render <файл>}"; [[ -f "$f" ]] || f="$HERE/$f"; m="$PWD/project.yaml"; [[ -f "$m" ]] || { echo "нет project.yaml в $PWD"; exit 1; }
   set -- --set "PROJECT=$(yget "$m" name)" --set "TASK_PREFIX=$(yget "$m" task_prefix)" --set "LOCAL_PREFIX=$(yget "$m" local_prefix)" --set "REPO=$(yrepo "$m")"
-  for k in kind team tracker commit adr estimates toolkit; do set -- "$@" --set "$k=$(yget "$m" profile.$k)"; done
+  for k in kind team tracker commit adr; do set -- "$@" --set "$k=$(yget "$m" profile.$k)"; done
   exec python3 "$RENDER" "$@" "$f"
 fi
 
 DST="."; YES=0
-P_name=""; P_prefix=""; P_repo=""; P_kind=""; P_team=""; P_tracker=""; P_commit=""; P_adr=""; P_estimates=""; P_toolkit=""
+P_name=""; P_prefix=""; P_repo=""; P_kind=""; P_team=""; P_tracker=""; P_commit=""; P_adr=""
 while [[ $# -gt 0 ]]; do case "$1" in
-  --name|--prefix|--repo|--kind|--team|--tracker|--commit|--adr|--estimates|--toolkit) printf -v "P_${1#--}" '%s' "$2"; shift 2;;
+  --name|--prefix|--repo|--kind|--team|--tracker|--commit|--adr) printf -v "P_${1#--}" '%s' "$2"; shift 2;;
   --yes|-y) YES=1; shift;;
   -h|--help) sed -n 2,12p "$0"; exit 0;;
   --*) echo "неизвестный флаг $1"; exit 2;;
@@ -48,7 +48,7 @@ ask() { local k="$1" q="$2" d="$3" ok="${4:-}" var="P_$1" v
   v="${v:-$d}"
   if [[ "$k" == prefix ]]; then v="$(tr 'a-z' 'A-Z' <<<"$v")"
   elif [[ -n "$ok" ]]; then v="$(tr 'A-Z' 'a-z' <<<"$v")"; case "$v" in y|true|1|on) v=yes;; n|false|0|off) v=no;; esac; fi
-  [[ -n "$ok" && "|$ok|" != *"|$v|"* ]] && { echo "$k: «$v» — допустимо: $ok"; exit 2; }
+  [[ -n "$ok" && "|$ok|" != *"|$v|"* ]] && { echo "$k: «${v}» — допустимо: $ok"; exit 2; }
   printf -v "$var" '%s' "$v"; }
 
 ask name      "Имя проекта" "$(basename "$DST")"
@@ -62,12 +62,10 @@ d=auto; [[ "$P_team" == team ]] && d=ask
 ask commit    "Коммит по завершении задачи: auto (сразу), ask (спросить, ждать ревью)" "$d" "auto|ask"
 d=yes; [[ "$P_team" == team ]] && d=no
 ask adr       "ADR и обсуждения переработок в личном слое (yes/no)" "$d" "yes|no"
-ask estimates "Оценки задач, /estimate (yes/no)" no "yes|no"
-ask toolkit   "Внешние наборы скиллов, toolkit-sync (yes/no)" no "yes|no"
 
 SETS=(--set "PROJECT=$P_name" --set "TASK_PREFIX=$P_prefix" --set "LOCAL_PREFIX=LOC" --set "REPO=$P_repo")
-for k in kind team tracker commit adr estimates toolkit; do var="P_$k"; SETS+=(--set "$k=${!var}"); done
-echo "профиль: name=$P_name prefix=$P_prefix repo=${P_repo:-—} kind=$P_kind team=$P_team tracker=$P_tracker commit=$P_commit adr=$P_adr estimates=$P_estimates toolkit=$P_toolkit"
+for k in kind team tracker commit adr; do var="P_$k"; SETS+=(--set "$k=${!var}"); done
+echo "профиль: name=$P_name prefix=$P_prefix repo=${P_repo:-—} kind=$P_kind team=$P_team tracker=$P_tracker commit=$P_commit adr=$P_adr"
 python3 "$RENDER" "${SETS[@]}" --profiles "$PROFILES" "$SRC" "$DST"
 [[ -d "$DST/.git" ]] || { git -C "$DST" init -q; echo "git init: $DST"; }
 [[ -n "$(yget "$M" template.commit)" ]] || "$HERE/sync.sh" "$DST" mark 2>/dev/null || true   # маркер сходимости для sync.sh

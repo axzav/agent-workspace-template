@@ -47,7 +47,7 @@ DST="$(cd "$DST" && pwd)"; M="$DST/project.yaml"
 [[ -n "$(yget "$M" profile.kind)" ]] || { echo "в $M нет profile: — допиши (ключи — skeleton/project.yaml) или запусти init.sh"; exit 1; }
 
 SETS=(--set "PROJECT=$(yget "$M" name)" --set "TASK_PREFIX=$(yget "$M" task_prefix)" --set "LOCAL_PREFIX=$(yget "$M" local_prefix)" --set "REPO=$(yrepo "$M")")
-for k in kind team tracker commit adr estimates toolkit; do SETS+=(--set "$k=$(yget "$M" profile.$k)"); done
+for k in kind team tracker commit adr; do SETS+=(--set "$k=$(yget "$M" profile.$k)"); done
 SKIP="$(tr '\n' ' ' <<<"$SEEDED") $(ylist "$M" template.skip)"
 MARK="$(yget "$M" template.commit)"; PMARK="$(yget "$M" template.project_commit)"
 HEAD_SHA="$(git -C "$HERE" rev-parse --short HEAD)"

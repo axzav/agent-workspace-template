@@ -5,11 +5,10 @@ title: Ответ хоста на отзыв
 status: todo
 priority: normal
 size: S
-estimation: ""
 repos: [backend, frontend]
 depends: [BOOK-431]
 remote: BOOK-433
-remote_synced: ""
+remote_synced: 2026-08-18 11:30
 created: 2026-08-18 11:05
 closed: ""
 ---

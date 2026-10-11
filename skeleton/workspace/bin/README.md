@@ -21,9 +21,6 @@
 | `workspace/bin/check/searchignore.sh` | корневой `.ignore` покрывает все репо (иначе Grep/Glob их не видят) |
 | `workspace/bin/check/secrets.sh` | похожие на токены строки в файлах под git |
 | `workspace/bin/check/manifest.sh` | карта проекта в `AGENTS.md` ⊇ `project.yaml: repos` |
-| `workspace/bin/git/status.sh`, `workspace/bin/git/pull.sh` | ветка / ahead-behind / грязные файлы по всем репо и корню; `git pull --ff-only` по всем репо |
+| `workspace/bin/git/status.sh` | ветка / ahead-behind / грязные файлы по всем репо и корню |
 | `workspace/bin/git/hooks/pre-commit` | хук корневого репо (`core.hooksPath` ставит `setup-local.sh`): `workspace/bin/check/all.sh`; обойти — `--no-verify` |
 | `workspace/bin/agent/setup-local.sh` | личный слой: `.claude/settings.local.json` (`autoMemoryDirectory` и allow на скрипты абсолютным путём), `local/`, хук |
-{{#if toolkit}}
-| `workspace/bin/agent/toolkit-sync.sh` | копирует внешние скиллы из `project.yaml: toolkit.sources` в папку `skills/` внутри `.claude/` |
-{{/if}}

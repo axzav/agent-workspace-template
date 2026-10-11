@@ -10,8 +10,6 @@ profile:                            # ответы init.sh; поменял — �
   tracker: {{TRACKER}}              # local — задачи только в файлах; remote — удалённый трекер, здесь зеркало
   commit: {{COMMIT}}                # auto — коммит по завершении задачи сразу; ask — спросить (ревью человека)
   adr: {{ADR}}                      # ADR и обсуждения переработок в личном слое
-  estimates: {{ESTIMATES}}          # /estimate и поле estimation
-  toolkit: {{TOOLKIT}}              # внешние наборы скиллов (bin/agent/toolkit-sync.sh)
 {{#if tracker=remote}}
 local_prefix: {{LOCAL_PREFIX}}      # задачи, которых в трекере нет: {{LOCAL_PREFIX}}-0001
 tracker:
@@ -62,9 +60,4 @@ ports:
     commands:                       # команды качества из корня репо (workspace/bin/stack/cmd.sh <name>); нет команды — нет ключа
       test: ""
       lint: ""
-{{/if}}
-{{#if toolkit}}
-
-toolkit:                            # внешние наборы скиллов, копируемые в .claude/skills (bin/agent/toolkit-sync.sh)
-  sources: []
 {{/if}}

@@ -45,8 +45,8 @@ case "$cmd" in
     rc=0; ids=""
     for f in $(adrs); do
       r=$(rel "$f"); id=$(field "$f" id); st=$(field "$f" status); n=$(basename "$f" | cut -c1-4)
-      [[ "$id" == "ADR-$n" ]] || { fail "$r: id «$id» не совпадает с номером файла (ADR-$n)"; rc=1; }
-      [[ "$st" =~ ^(proposed|accepted|rejected|superseded)$ ]] || { fail "$r: status «$st» (proposed | accepted | rejected | superseded)"; rc=1; }
+      [[ "$id" == "ADR-$n" ]] || { fail "$r: id «${id}» не совпадает с номером файла (ADR-$n)"; rc=1; }
+      [[ "$st" =~ ^(proposed|accepted|rejected|superseded)$ ]] || { fail "$r: status «${st}» (proposed | accepted | rejected | superseded)"; rc=1; }
       for k in title date; do [[ -z "$(field "$f" $k)" ]] && { fail "$r: нет поля $k"; rc=1; }; done
       grep -q '^## Варианты' "$f" || warn "$r: нет раздела «Варианты»"
       [[ "$st" == "accepted" ]] && grep -q '^## Открытые вопросы' "$f" && awk '/^## Открытые вопросы/{f=1;next} /^## /{f=0} f&&NF' "$f" | grep -q . && warn "$r: accepted, но раздел «Открытые вопросы» не пуст"

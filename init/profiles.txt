@@ -1,6 +1,6 @@
 # Какие файлы скелета ставятся при каком профиле (init/render.py). Строка: «glob от skeleton/  условие»;
 # файл без строки ставится всегда. Условие — как в {{#if}}: key, !key, key=v1|v2, несколько через &.
-# Ключи профиля — project.yaml: profile (kind, team, tracker, commit, adr, estimates, toolkit).
+# Ключи профиля — project.yaml: profile (kind, team, tracker, commit, adr).
 
 # ADR и обсуждения — там, где решения принимаются в личном слое (обычно solo)
 _claude/commands/adr.md                       adr
@@ -20,22 +20,9 @@ workspace/prompts/tracker-pull.md             tracker=remote
 workspace/prompts/tracker-comment.md          tracker=remote
 workspace/prompts/task-description.md         tracker=remote
 workspace/bin/tracker/normalize.py            tracker=remote
-
-# Команда: разбор замечаний к MR
-_claude/commands/fix-mr.md                    team=team
-workspace/prompts/fix-mr.md                   team=team
-
-# Оценки задач
-_claude/commands/estimate.md                  estimates
-workspace/prompts/estimate.md                 estimates
-workspace/tracker/notes/estimate-history.md   estimates
+workspace/tracker/REMOTE.md                   tracker=remote
 
 # Несколько сервисов: общий стек, контракты, healthcheck сверх smoke одного репо
 workspace/docs/contracts/*                    kind=services
 workspace/docs/dev/*                          kind=services
 workspace/bin/stack/healthcheck.sh            kind=services
-_claude/commands/healthcheck.md               kind=services
-workspace/prompts/healthcheck.md              kind=services
-
-# Внешние наборы скиллов
-workspace/bin/agent/toolkit-sync.sh           toolkit

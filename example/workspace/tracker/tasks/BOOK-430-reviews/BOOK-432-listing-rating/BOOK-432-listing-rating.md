@@ -5,11 +5,10 @@ title: Рейтинг объекта — расчёт, хранение, пок�
 status: todo
 priority: normal
 size: M
-estimation: ""
 repos: [backend, frontend]
 depends: [BOOK-431]
 remote: BOOK-432
-remote_synced: ""
+remote_synced: 2026-08-18 11:20
 created: 2026-08-18 10:55
 closed: ""
 ---

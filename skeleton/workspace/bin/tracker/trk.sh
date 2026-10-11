@@ -83,16 +83,16 @@ case "$cmd" in
       r=$(rel "$f"); id=$(field "$f" id); st=$(field "$f" status)
       [[ -z "$id" ]] && { fail "$r: нет id"; rc=1; continue; }
       unit=$(basename "${f%.md}")
-      [[ "$unit" == "$id"* ]] || { fail "$r: имя единицы «$unit» не начинается с id $id"; rc=1; }
+      [[ "$unit" == "$id"* ]] || { fail "$r: имя единицы «${unit}» не начинается с id $id"; rc=1; }
       pfx=$(id_prefix "$id")
 {{#if tracker=remote}}
-      [[ "$pfx" == "$TASK_PREFIX" || "$pfx" == "$LOCAL_PREFIX" ]] || { fail "$r: префикс id «$pfx» не из project.yaml ($TASK_PREFIX / $LOCAL_PREFIX)"; rc=1; }
+      [[ "$pfx" == "$TASK_PREFIX" || "$pfx" == "$LOCAL_PREFIX" ]] || { fail "$r: префикс id «${pfx}» не из project.yaml ($TASK_PREFIX / $LOCAL_PREFIX)"; rc=1; }
       rm_=$(field "$f" remote)
       [[ -n "$rm_" && "$rm_" != "$id" ]] && { fail "$r: remote: $rm_ ≠ id (id задачи = ключ трекера)"; rc=1; }
       [[ "$pfx" == "$TASK_PREFIX" && -z "$rm_" ]] && { fail "$r: id с префиксом трекера, но remote: пуст — задача без тикета должна быть $LOCAL_PREFIX-NNNN"; rc=1; }
       [[ -n "$rm_" && -z "$(field "$f" remote_synced)" ]] && warn "$r: файл впереди трекера (remote_synced пуст)"
 {{#else}}
-      [[ "$pfx" == "$TASK_PREFIX" ]] || { fail "$r: префикс id «$pfx» не из project.yaml ($TASK_PREFIX)"; rc=1; }
+      [[ "$pfx" == "$TASK_PREFIX" ]] || { fail "$r: префикс id «${pfx}» не из project.yaml ($TASK_PREFIX)"; rc=1; }
 {{/if}}
       ty=$(field "$f" type); [[ -z "$ty" || "$ty" =~ ^(task|epic)$ ]] || { fail "$r: type: $ty (task | epic)"; rc=1; }
       for k in title status created; do [[ -z "$(field "$f" $k)" ]] && { fail "$r: нет поля $k"; rc=1; }; done
@@ -120,7 +120,7 @@ case "$cmd" in
         "$TR/done"/*)   [[ $top == 1 && ! "$st" =~ ^(done|cancelled)$ ]] && { fail "$r: в done/ нужен status: done или cancelled"; rc=1; } ;;
       esac
       case "$f" in "$TR/done"/*) ;; *)   # живая постановка — с обязательными разделами; длина не ограничена
-        for s in "Контекст / Проблема" "Что делаем" "Критерии готовности"; do grep -qxF "## $s" "$f" || warn "$r: нет раздела «## $s»"; done ;; esac
+        for s in "Контекст / Проблема" "Что делаем" "Критерии готовности"; do grep -qxF "## $s" "$f" || warn "$r: нет раздела «## ${s}»"; done ;; esac
     done
     dups=$(all_ids | sort | uniq -d); [[ -n "$dups" ]] && { fail "дубли id: $dups"; rc=1; }
     [[ $rc == 0 ]] && ok "трекер консистентен"; exit $rc

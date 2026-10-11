@@ -5,9 +5,6 @@ title: Короткое название
 status: todo
 priority: normal      # priority/size/repos/depends питают board/ready{{#if tracker=remote}}; у привязанных к трекеру задач необязательны{{/if}}
 size: M
-{{#if estimates}}
-estimation: ""
-{{/if}}
 repos: []
 depends: []
 {{#if tracker=remote}}

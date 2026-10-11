@@ -5,11 +5,10 @@ title: Оставить отзыв после выезда
 status: todo
 priority: soon
 size: M
-estimation: ""
 repos: [backend, frontend, realtime]
 depends: []
 remote: BOOK-431
-remote_synced: ""
+remote_synced: 2026-08-18 11:05
 created: 2026-08-18 10:40
 closed: ""
 ---
